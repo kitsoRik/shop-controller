@@ -1,6 +1,4 @@
 import React from "react";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 
 import classes from "./LoginForm.module.scss";
 import { useFormik, FormikHelpers } from "formik";
@@ -48,7 +46,7 @@ const LoginForm = ({
 	});
 	return (
 		<form className={classes.loginForm} onSubmit={formik.handleSubmit}>
-			<div>
+			{/*<div>
 				<h3 style={{ margin: "1px 0" }}>E-mail</h3>
 				<InputText
 					name="email"
@@ -74,7 +72,7 @@ const LoginForm = ({
 				disabled={
 					!formik.isValid || Object.keys(formik.touched).length === 0
 				}
-			/>
+			/>*/}
 		</form>
 	);
 };

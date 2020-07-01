@@ -1,0 +1,17 @@
+.form {
+	width: 520px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-row-gap: 10px;
+	align-items: center;
+}
+
+.formItem {
+	margin: 0 !important;
+	display: grid !important;
+	grid-template-columns: 160px auto;
+}
+
+.submitButton {
+	margin: 0 auto;
+}

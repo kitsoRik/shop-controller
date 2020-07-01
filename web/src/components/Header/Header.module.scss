@@ -1,0 +1,19 @@
+.header {
+	height: 72px;
+	display: flex;
+
+	box-shadow: 0.1px 0.1px 6px 0px black;
+	z-index: 1000;
+}
+
+.panel {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.fullName {
+	margin: 0;
+	padding: 0;
+}

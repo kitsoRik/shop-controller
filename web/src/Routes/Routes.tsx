@@ -5,17 +5,17 @@ import Login from "../pages/Login";
 import { User } from "../mobx/user";
 import Home from "../pages/Home";
 import { observer, inject } from "mobx-react";
+import Users from "../pages/Users";
 
 interface Props {
 	user?: User;
 }
 
 const Routes = ({ user }: Props) => {
-	const isLoggined = user!.isLoggined;
 	return (
 		<Switch>
-			{!isLoggined && <Route path="/" render={() => <Login />} />}
-			{isLoggined && <Route path="" exact render={() => <Home />} />}
+			<Route path="/" exact render={() => <Home />} />
+			<Route path="/users" render={() => <Users />} />
 		</Switch>
 	);
 };

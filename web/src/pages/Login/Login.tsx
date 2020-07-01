@@ -24,11 +24,11 @@ const Login = ({ user }: Props) => {
 		const {
 			data: {
 				result: {
-					user: { name, email, isAdmin },
+					user: { name, surname, email, isAdmin },
 				},
 			},
 		} = await api.auth.loginIn(inputEmail, inputPassword);
-		user!.setData(name, email, !!isAdmin);
+		user!.setData(name, surname, email, !!isAdmin);
 	};
 
 	return (
