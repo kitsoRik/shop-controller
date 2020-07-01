@@ -3,11 +3,14 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { Provider } from "mobx-react";
 import { user } from "./mobx/mobx";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App user={user} />
+		<Provider user={user}>
+			<App />
+		</Provider>
 	</React.StrictMode>,
 	document.getElementById("root")
 );

@@ -1,15 +1,17 @@
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 
 export class User {
 	@observable name: string = "";
 	@observable email: string = "";
 	@observable isAdmin: boolean = false;
 
-	@action setName(name: string) {
+	@action setData(name: string, email: string, isAdmin: boolean) {
 		this.name = name;
+		this.email = email;
+		this.isAdmin = isAdmin;
 	}
 
-	@action setEmail(email: string) {
-		this.email = email;
+	@computed get isLoggined() {
+		return this.email !== "";
 	}
 }
