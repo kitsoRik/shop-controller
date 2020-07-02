@@ -6,5 +6,6 @@ export interface IUser {
 	surname: string;
 	email: string;
 	role: UserRole;
+	description: string;
 	imageName?: string;
 }

@@ -11,8 +11,8 @@ export const createUser = (
 	return post("/users/", { name, surname, email, password, role });
 };
 
-export const administrators = (offset: number, limit: number) => {
-	return get("/users/administrators", { offset, limit });
+export const users = (role: UserRole, offset: number, limit: number) => {
+	return get(`/users/${role}s`, { offset, limit });
 };
 
 export const putAdministrator = (
@@ -20,7 +20,8 @@ export const putAdministrator = (
 	name: string,
 	surname: string,
 	email: string,
-	role: UserRole
+	role: UserRole,
+	description: string
 ) => {
-	return put(`/users/administrators/${id}/`, { name, surname, email, role });
+	return put(`/users/${id}/`, { name, surname, email, role, description });
 };

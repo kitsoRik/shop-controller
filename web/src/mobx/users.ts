@@ -1,5 +1,6 @@
 import { observable, action, computed } from "mobx";
 import { IUser } from "../models/IUser";
+import { UserRole } from "../models/UserRole";
 
 export class Users {
 	@observable users: IUser[] = [];
@@ -16,7 +17,11 @@ export class Users {
 		];
 	}
 
-	@computed get administrators() {
-		return this.users.filter((u) => u.role === "administrator");
+	getUserById(id: string) {
+		return this.users.find((u) => u.id === id);
+	}
+
+	getUsersByRole(role: UserRole) {
+		return this.users.filter((u) => u.role === role);
 	}
 }

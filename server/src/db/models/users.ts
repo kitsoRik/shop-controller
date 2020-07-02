@@ -22,15 +22,19 @@ const schema = new Schema({
 		type: String,
 		required: true,
 	},
-	isAdmin: {
-		type: Boolean,
-		default: false,
-	},
 	role: {
 		type: String,
 		required: true,
 		default: "noone",
 		enum: ["administrator", "seller", "mover", "noone"],
+	},
+	description: {
+		type: String,
+		default: "",
+	},
+	isAdmin: {
+		type: Boolean,
+		default: false,
 	},
 });
 
@@ -66,6 +70,7 @@ const User = {
 			surname?: string;
 			email?: string;
 			role?: string;
+			description?: string;
 		}
 	) => userModel.findOneAndUpdate({ id }, changes, { new: true }),
 

@@ -3,8 +3,8 @@ import React from "react";
 import UsersPage from "../../../shared/UsersPage";
 import { UserRole } from "../../../models/UserRole";
 
-const Administrators = () => {
-	return <UsersPage role={UserRole.ADMINISTRATOR} />;
+const Movers = () => {
+	return <UsersPage role={UserRole.MOVER} />;
 };
 
-export default Administrators;
+export default Movers;

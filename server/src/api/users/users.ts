@@ -26,27 +26,26 @@ router.post("/", async (req: IExtendRequest, res) => {
 	});
 });
 
-router.get("/administrators", async (req: IExtendRequest, res) => {
-	const { user } = req.context!;
+router.get(
+	"/:role(administrator|seller|mover)s",
+	async (req: IExtendRequest, res) => {
+		const { user } = req.context!;
+		const { role } = req.params;
+		if (!user.isAdmin) {
+			return forbidden(res, "NO_ACCESS");
+		}
 
-	if (!user.isAdmin) {
-		return forbidden(res, "NO_ACCESS");
+		const { offset, limit } = req.body;
+
+		const users = await User.getUsersByRole(role, offset, limit);
+
+		sendSuccess(res)({
+			users,
+		});
 	}
+);
 
-	const { offset, limit } = req.body;
-
-	const administrators = await User.getUsersByRole(
-		"administrator",
-		offset,
-		limit
-	);
-
-	sendSuccess(res)({
-		administrators,
-	});
-});
-
-router.put("/administrators/:id", async (req: IExtendRequest, res) => {
+router.put("/:id", async (req: IExtendRequest, res) => {
 	const { user } = req.context!;
 
 	if (!user || !user.isAdmin) {
@@ -54,13 +53,14 @@ router.put("/administrators/:id", async (req: IExtendRequest, res) => {
 	}
 
 	const { id } = req.params;
-	const { name, surname, email, role }: any = req.query;
+	const { name, surname, email, role, description }: any = req.query;
 
 	const changedUser = await User.changeUser(id, {
 		name,
 		surname,
 		email,
 		role,
+		description,
 	});
 
 	sendSuccess(res)({

@@ -53,8 +53,18 @@ const Drawer = ({ user }: Props) => {
 					>
 						Адміністратори
 					</Menu.Item>
-					<Menu.Item key="sellers">Продавці</Menu.Item>
-					<Menu.Item key="movers">Гружчики</Menu.Item>
+					<Menu.Item
+						key="sellers"
+						onClick={() => history.push("/users/sellers")}
+					>
+						Продавці
+					</Menu.Item>
+					<Menu.Item
+						key="movers"
+						onClick={() => history.push("/users/movers")}
+					>
+						Гружчики
+					</Menu.Item>
 				</SubMenu>
 			</Menu>
 		</div>

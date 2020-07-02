@@ -1,8 +1,8 @@
 import React from "react";
 
-import classes from "./AdministratorsList.module.scss";
+import classes from "./UsersList.module.scss";
 import { Skeleton, List, Avatar } from "antd";
-import { IUser } from "../../../../models/IUser";
+import { IUser } from "../../../models/IUser";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -16,13 +16,10 @@ const AdministratorsList = ({ users }: Props) => {
 			loading={false}
 			itemLayout="horizontal"
 			dataSource={users}
-			renderItem={({ id, surname, name, imageName }) => (
+			renderItem={({ id, surname, name, role, imageName }) => (
 				<List.Item
 					actions={[
-						<Link to={`/users/administrators/${id}/edit`}>
-							edit
-						</Link>,
-						<a key="list-loadmore-more">more</a>,
+						<Link to={`/users/${role}s/${id}/edit`}>edit</Link>,
 					]}
 				>
 					<Skeleton avatar title={false} loading={false} active>
