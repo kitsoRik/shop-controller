@@ -22,6 +22,7 @@ const sessionModel = model("sessions", schema);
 
 const Session = {
 	createSession: (userId: string) => sessionModel.create({ userId }),
+	removeSession: (sesid: string) => sessionModel.findOneAndRemove({ sesid }),
 	getSessionBySesid: (sesid: string) => sessionModel.findOne({ sesid }),
 };
 

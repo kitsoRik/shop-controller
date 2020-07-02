@@ -2,12 +2,13 @@ import React from "react";
 
 import styles from "./Page.module.scss";
 
-interface IPage {
-	children: JSX.Element;
-	className?: string;
-}
+interface IPage
+	extends React.DetailedHTMLProps<
+		React.HTMLAttributes<HTMLDivElement>,
+		HTMLDivElement
+	> {}
 
-const Page = ({ children, className, ...props }: IPage | any) => {
+const Page = ({ children, className, ...props }: IPage) => {
 	return (
 		<div className={`${styles.page} ${className ?? ""}`} {...props}>
 			{children}

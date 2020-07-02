@@ -4,6 +4,8 @@ import { sendSuccess } from "../../errors/base";
 import User from "../../db/models/users";
 import Session from "../../db/models/sessions";
 import { internalServerError } from "../../errors/server-errors";
+import { IExtendRequest } from "../../extends/IExtendRequest";
+import accessable from "../../middlewars/accessable";
 
 const router = express.Router();
 
@@ -50,5 +52,20 @@ router.post("/login", async (req, res) => {
 		},
 	});
 });
+
+router.post(
+	"/unlogin",
+	accessable(async (req: IExtendRequest, res) => {
+		const { user } = req.context!;
+
+		const { sesid } = req.cookies;
+
+		Session.removeSession(sesid);
+
+		res.clearCookie("sesid");
+
+		sendSuccess(res)({});
+	})
+);
 
 export default router;

@@ -4,7 +4,7 @@ import UsersPage from "../../../shared/UsersPage";
 import { UserRole } from "../../../models/UserRole";
 
 const Movers = () => {
-	return <UsersPage role={UserRole.MOVER} />;
+	return;
 };
 
 export default Movers;

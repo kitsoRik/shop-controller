@@ -3,13 +3,13 @@ import { forbidden } from "../../errors/client-errors";
 import { sendSuccess } from "../../errors/base";
 import User from "../../db/models/users";
 import { IExtendRequest } from "../../extends/IExtendRequest";
+import { UserRoleValues } from "../../models/UserRole";
 
 const router = express.Router();
 
 router.post("/", async (req: IExtendRequest, res) => {
 	const { user } = req.context!;
-	console.log(req.body);
-	if (!user.isAdmin) return forbidden(res, "NO_ACCESS");
+	if (!user!.isAdmin) return forbidden(res, "NO_ACCESS");
 
 	const { name, surname, email, password, role } = req.body;
 
@@ -27,11 +27,11 @@ router.post("/", async (req: IExtendRequest, res) => {
 });
 
 router.get(
-	"/:role(administrator|seller|mover)s",
+	`/:role(${UserRoleValues.join("|")})s`,
 	async (req: IExtendRequest, res) => {
 		const { user } = req.context!;
 		const { role } = req.params;
-		if (!user.isAdmin) {
+		if (!user!.isAdmin) {
 			return forbidden(res, "NO_ACCESS");
 		}
 

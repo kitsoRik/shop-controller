@@ -27,7 +27,7 @@ const UsersPage = ({ store, role }: Props) => {
 			} = await api.users.users(role, 0, 10);
 			users.appendUsers(usersFromServer);
 		})();
-	}, []);
+	}, [role]);
 
 	return (
 		<Page>

@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import * as sha256 from "sha256";
+import { UserRoleValues } from "../../models/UserRole";
 
 const schema = new Schema({
 	id: {
@@ -26,7 +27,7 @@ const schema = new Schema({
 		type: String,
 		required: true,
 		default: "noone",
-		enum: ["administrator", "seller", "mover", "noone"],
+		enum: UserRoleValues,
 	},
 	description: {
 		type: String,

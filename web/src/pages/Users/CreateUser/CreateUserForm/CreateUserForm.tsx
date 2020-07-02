@@ -3,6 +3,7 @@ import { Button, Input, Checkbox, Form, Select } from "antd";
 import classes from "./CreateUserForm.module.scss";
 import { Formik } from "formik";
 import { Option } from "antd/lib/mentions";
+import { UserRole } from "../../../../models/UserRole";
 
 interface Props {
 	formik: any;
@@ -74,9 +75,12 @@ const CreateUserForm = ({
 					onBlur={() => setFieldTouched("role")}
 					placeholder="Наприклад: Адміністратор"
 				>
-					<Option value="administrator">Адміністратори</Option>
-					<Option value="seller">Продавець</Option>
-					<Option value="mover">Грузчик</Option>
+					<Option value={UserRole.ADMINISTRATOR}>
+						Адміністратори
+					</Option>
+					<Option value={UserRole.SELLER}>Продавець</Option>
+					<Option value={UserRole.MOVER}>Грузчик</Option>
+					<Option value={UserRole.MANAGER}>Менеджер</Option>
 				</Select>
 			</Form.Item>
 			<Form.Item>

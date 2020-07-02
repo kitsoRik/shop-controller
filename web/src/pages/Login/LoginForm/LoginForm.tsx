@@ -1,40 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 
 import classes from "./LoginForm.module.scss";
 import { useFormik, FormikHelpers } from "formik";
+import { Form, Input, Button, Alert, Spin } from "antd";
+import { User } from "../../../mobx/user";
+import api from "../../../providers/api";
+import { inject, observer } from "mobx-react";
 
-interface ILoginForm {
-	email: string;
-	setEmail: (value: string) => void;
-
-	password: string;
-	setPassword: (value: string) => void;
-
-	handleSubmit: (
-		values: {
-			email: string;
-			password: string;
-		},
-		formikHelpers: FormikHelpers<{
-			email: string;
-			password: string;
-		}>
-	) => void | Promise<any>;
+interface Props {
+	user?: User;
 }
 
-const LoginForm = ({
-	email,
-	setEmail,
-	password,
-	setPassword,
-	handleSubmit,
-}: ILoginForm) => {
-	const formik = useFormik({
+const LoginForm = ({ user }: Props) => {
+	const [error, setError] = useState<string | null>(null);
+	const [loading, setLoading] = useState<boolean>(false);
+
+	const {
+		values,
+		setErrors,
+		handleChange,
+		handleBlur,
+		handleSubmit,
+		isValid,
+		dirty,
+	} = useFormik({
 		initialValues: {
-			email,
-			password,
+			email: "",
+			password: "",
 		},
-		onSubmit: handleSubmit,
+		onSubmit: async ({ email: inputEmail, password: inputPassword }) => {
+			setLoading(true);
+			try {
+				setError(null);
+				const {
+					data: {
+						result: {
+							user: { name, surname, email, role, isAdmin },
+						},
+					},
+				} = await api.auth.loginIn(inputEmail, inputPassword);
+				console.log();
+				user!.setData(name, surname, email, role, !!isAdmin);
+			} catch (e) {
+				if (e.response) {
+					const type = e.response.data.error.type;
+					switch (type) {
+						case "UNKNOWN_DATA":
+							setError("Такої пари даних не існує");
+					}
+				}
+			}
+			setLoading(false);
+		},
 		validate: ({ email, password }) => {
 			const errors: any = {};
 
@@ -44,37 +61,46 @@ const LoginForm = ({
 			return errors;
 		},
 	});
+
 	return (
-		<form className={classes.loginForm} onSubmit={formik.handleSubmit}>
-			{/*<div>
-				<h3 style={{ margin: "1px 0" }}>E-mail</h3>
-				<InputText
-					name="email"
-					onBlur={formik.handleBlur}
-					onChangeCapture={formik.handleChange}
-					value={email}
-					onChange={(e: any) => setEmail(e.target.value)}
-				/>
-			</div>
-			<div>
-				<h3 style={{ margin: "1px 0" }}>Пароль</h3>
-				<InputText
-					type="password"
-					name="password"
-					onBlur={formik.handleBlur}
-					onChangeCapture={formik.handleChange}
-					value={password}
-					onChange={(e: any) => setPassword(e.target.value)}
-				/>
-			</div>
-			<Button
-				label="Ввійти"
-				disabled={
-					!formik.isValid || Object.keys(formik.touched).length === 0
-				}
-			/>*/}
-		</form>
+		<Spin spinning={loading}>
+			<Form
+				className={classes.loginForm}
+				onSubmitCapture={handleSubmit}
+				layout="vertical"
+			>
+				<Form.Item>
+					{error && <Alert message={error} type="error" showIcon />}
+				</Form.Item>
+				<Form.Item label="E-mail">
+					<Input
+						name="email"
+						value={values.email}
+						onChange={handleChange}
+						onBlur={handleBlur}
+					/>
+				</Form.Item>
+				<Form.Item label="Пароль">
+					<Input.Password
+						name="password"
+						value={values.password}
+						onChange={handleChange}
+						onBlur={handleBlur}
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button
+						type="primary"
+						htmlType="submit"
+						style={{ display: "block", margin: "0 auto" }}
+						disabled={!isValid || !dirty}
+					>
+						Ввійти
+					</Button>
+				</Form.Item>
+			</Form>
+		</Spin>
 	);
 };
 
-export default LoginForm;
+export default inject("user")(observer(LoginForm));

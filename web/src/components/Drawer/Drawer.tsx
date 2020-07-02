@@ -4,32 +4,20 @@ import classes from "./Drawer.module.scss";
 import { User } from "../../mobx/user";
 import { inject, observer } from "mobx-react";
 import { useHistory } from "react-router";
-import {
-	AppstoreOutlined,
-	MenuUnfoldOutlined,
-	MenuFoldOutlined,
-	PieChartOutlined,
-	DesktopOutlined,
-	ContainerOutlined,
-	MailOutlined,
-} from "@ant-design/icons";
+import { PieChartOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Menu } from "antd";
 import SubMenu from "antd/lib/menu/SubMenu";
+import { UserRole } from "../../models/UserRole";
 
 interface Props {
 	user?: User;
 }
 
 const Drawer = ({ user }: Props) => {
-	const [visible, setVisible] = useState(true);
 	const history = useHistory();
 
 	const [collapsed, setCollapsed] = useState(false);
-
-	const toggleCollapsedHandle = () => {
-		setCollapsed(!collapsed);
-	};
-
+	console.log(user?.role);
 	return (
 		<div className={classes.drawer}>
 			<Menu
@@ -39,36 +27,87 @@ const Drawer = ({ user }: Props) => {
 				inlineCollapsed={collapsed}
 				style={{ height: "100%" }}
 			>
-				<SubMenu key="sub1" icon={<MailOutlined />} title="Користувачі">
-					<Menu.Item
-						key="create"
-						icon={<PieChartOutlined />}
-						onClick={() => history.push("/users/create")}
-					>
-						Створити
-					</Menu.Item>
-					<Menu.Item
-						key="admins"
-						onClick={() => history.push("/users/administrators")}
-					>
-						Адміністратори
-					</Menu.Item>
-					<Menu.Item
-						key="sellers"
-						onClick={() => history.push("/users/sellers")}
-					>
-						Продавці
-					</Menu.Item>
-					<Menu.Item
-						key="movers"
-						onClick={() => history.push("/users/movers")}
-					>
-						Гружчики
-					</Menu.Item>
-				</SubMenu>
+				{user?.isAdmin && administratorItems(history)}
+				{user?.role === UserRole.MOVER && moverItems(history)}
+				{user?.role === UserRole.MANAGER && managerItems(history)}
 			</Menu>
 		</div>
 	);
 };
+
+const administratorItems = (history: any) => [
+	<SubMenu key="users" icon={<MailOutlined />} title="Користувачі">
+		<Menu.Item
+			key="create"
+			icon={<PieChartOutlined />}
+			onClick={() => history.push("/users/create")}
+		>
+			Створити
+		</Menu.Item>
+		<Menu.Item
+			key={UserRole.ADMINISTRATOR}
+			onClick={() => history.push(`/users/${UserRole.ADMINISTRATOR}s`)}
+		>
+			Адміністратори
+		</Menu.Item>
+		<Menu.Item
+			key={UserRole.SELLER}
+			onClick={() => history.push(`/users/${UserRole.SELLER}s`)}
+		>
+			Продавці
+		</Menu.Item>
+		<Menu.Item
+			key={UserRole.MOVER}
+			onClick={() => history.push(`/users/${UserRole.MOVER}s`)}
+		>
+			Гружчики
+		</Menu.Item>
+		<Menu.Item
+			key={UserRole.MANAGER}
+			onClick={() => history.push(`/users/${UserRole.MANAGER}s`)}
+		>
+			Менеджери
+		</Menu.Item>
+	</SubMenu>,
+
+	<SubMenu key="actions" icon={<PieChartOutlined />} title="Статистика">
+		<SubMenu
+			key="movers_actions"
+			icon={<PieChartOutlined />}
+			title="Дії гружчиків"
+		>
+			{moverItems(history)}
+		</SubMenu>
+	</SubMenu>,
+];
+
+const moverItems = (history: any) => [
+	<Menu.Item
+		key="unload"
+		icon={<PieChartOutlined />}
+		onClick={() => history.push("/actions/movers/unload")}
+	>
+		Розвантажити товар
+	</Menu.Item>,
+];
+
+const managerItems = (history: any) => [
+	<Menu.Item
+		key="create-product"
+		icon={<PieChartOutlined />}
+		onClick={() =>
+			history.push(`/actions/${UserRole.MANAGER}s/create-product`)
+		}
+	>
+		Додати продукт
+	</Menu.Item>,
+	<Menu.Item
+		key="products"
+		icon={<PieChartOutlined />}
+		onClick={() => history.push("/products/")}
+	>
+		Продукти
+	</Menu.Item>,
+];
 
 export default inject("user")(observer(Drawer));

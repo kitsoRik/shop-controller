@@ -1,19 +1,22 @@
 .header {
-    height: 50px;
-    display: flex;
+	padding: 0 10px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-    box-shadow: 0.1px 0.1px 6px 0px black;
-    z-index: 1000;
+	box-shadow: 0.1px 0.1px 6px 0px black;
+	z-index: 1000;
 }
 
 .panel {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .fullName {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }

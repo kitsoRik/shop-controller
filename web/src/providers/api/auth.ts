@@ -10,3 +10,7 @@ export const loginIn = (email: string, password: string) => {
 		password,
 	});
 };
+
+export const unlogin = () => {
+	return post("/auth/unlogin");
+};

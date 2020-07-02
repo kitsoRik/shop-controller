@@ -24,11 +24,11 @@ const App = ({ user }: Props) => {
 				const {
 					data: {
 						result: {
-							user: { name, surname, email, isAdmin },
+							user: { name, surname, email, role, isAdmin },
 						},
 					},
 				} = await api.auth.auth();
-				user?.setData(name, surname, email, !!isAdmin);
+				user?.setData(name, surname, email, role, !!isAdmin);
 				setLoading(false);
 			} catch (e) {
 				console.log(e);
