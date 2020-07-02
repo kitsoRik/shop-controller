@@ -4,11 +4,11 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "mobx-react";
-import { user } from "./mobx/mobx";
+import { user, store } from "./mobx/mobx";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<Provider user={user}>
+		<Provider user={user} store={store}>
 			<App />
 		</Provider>
 	</React.StrictMode>,

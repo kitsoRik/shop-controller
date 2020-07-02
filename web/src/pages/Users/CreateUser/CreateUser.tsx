@@ -4,6 +4,7 @@ import classes from "./CreateUser.module.scss";
 import Page from "../../../shared/Page";
 import CreateUserForm from "./CreateUserForm";
 import { useFormik } from "formik";
+import api from "../../../providers/api";
 
 const CreateUser = () => {
 	const handleSubmit = async ({
@@ -11,14 +12,32 @@ const CreateUser = () => {
 		surname,
 		email,
 		password,
-		passwordConfirm,
+		role,
 	}: {
 		name: string;
 		surname: string;
 		email: string;
 		password: string;
-		passwordConfirm: string;
-	}) => {};
+		role: string;
+	}) => {
+		try {
+			const {
+				data: {
+					result: { user },
+				},
+			} = await api.users.createUser(
+				name,
+				surname,
+				email,
+				password,
+				role
+			);
+			console.log(user);
+		} catch (e) {
+			console.log(e);
+			console.log(JSON.stringify(e));
+		}
+	};
 
 	const formik = useFormik({
 		initialValues: {
@@ -27,6 +46,7 @@ const CreateUser = () => {
 			email: "",
 			password: "",
 			passwordConfirm: "",
+			role: "",
 		},
 		validate: ({ name, surname, email, password, passwordConfirm }) => {
 			const errors: any = {};

@@ -18,9 +18,11 @@ schema.pre("save", function (next) {
 	next();
 });
 
-const Session = model("sessions", schema);
+const sessionModel = model("sessions", schema);
 
-export default {
-	createSession: (userId: string) => Session.create({ userId }),
-	getSessionBySesid: (sesid: string) => Session.findOne({ sesid }),
+const Session = {
+	createSession: (userId: string) => sessionModel.create({ userId }),
+	getSessionBySesid: (sesid: string) => sessionModel.findOne({ sesid }),
 };
+
+export default Session;

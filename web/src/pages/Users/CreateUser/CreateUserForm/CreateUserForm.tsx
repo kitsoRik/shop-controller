@@ -1,14 +1,24 @@
 import React from "react";
-import { Button, Input, Checkbox, Form } from "antd";
+import { Button, Input, Checkbox, Form, Select } from "antd";
 import classes from "./CreateUserForm.module.scss";
 import { Formik } from "formik";
+import { Option } from "antd/lib/mentions";
 
 interface Props {
 	formik: any;
 }
 
 const CreateUserForm = ({
-	formik: { values, errors, touched, handleChange, handleBlur, handleSubmit },
+	formik: {
+		values,
+		errors,
+		touched,
+		handleChange,
+		handleBlur,
+		handleSubmit,
+		setFieldValue,
+		setFieldTouched,
+	},
 }: Props) => {
 	return (
 		<Form onSubmitCapture={handleSubmit} className={classes.form}>
@@ -20,22 +30,55 @@ const CreateUserForm = ({
 					handleChange,
 					handleBlur,
 					handleSubmit,
-					names: [
-						"name",
-						"surname",
-						"email",
-						"password",
-						"passwordConfirm",
-					],
-					labels: [
-						"Ім'я",
-						" Прізвище",
-						"E-mail",
-						"Пароль",
-						"Підтвердження паролю",
+					params: [
+						{
+							name: "name",
+							label: "Ім'я",
+							placeholder: "Наприклад: Ростислав",
+						},
+						{
+							name: "surname",
+							label: "Прізвище",
+							placeholder: "Наприклад: Підбурачинський",
+						},
+						{
+							name: "email",
+							label: "E-mail",
+							placeholder: "Наприклад: example@mail.com",
+						},
+						{
+							name: "password",
+							label: "Пароль",
+							placeholder: "Наприклад: 36eoDMBWbZEnlKCx6n",
+						},
+						{
+							name: "passwordConfirm",
+							label: "Підтвердження паролю",
+							placeholder: "Наприклад: 36eoDMBWbZEnlKCx6n",
+						},
 					],
 				}}
 			/>
+			<Form.Item
+				className={classes.formItem}
+				label={"Роль"}
+				name={"role"}
+				validateStatus={
+					errors.role && touched.role ? "error" : "validating"
+				}
+				help={touched.role && errors.role}
+			>
+				<Select
+					value={values.role}
+					onChange={(value) => setFieldValue("role", value)}
+					onBlur={() => setFieldTouched("role")}
+					placeholder="Наприклад: Адміністратор"
+				>
+					<Option value="administrator">Адміністратори</Option>
+					<Option value="seller">Продавець</Option>
+					<Option value="mover">Грузчик</Option>
+				</Select>
+			</Form.Item>
 			<Form.Item>
 				<Button
 					type="primary"
@@ -60,13 +103,12 @@ const Items = ({
 	touched,
 	handleChange,
 	handleBlur,
-	names,
-	labels,
+	params,
 }: any) => {
 	return (
 		<>
-			{names.map((name: string, index: number) => {
-				const label = labels[index];
+			{params.map((param: any, index: number) => {
+				const { name, label, placeholder } = param;
 				const InputComponent = name.startsWith("password")
 					? Input.Password
 					: Input;
@@ -87,6 +129,7 @@ const Items = ({
 							value={values[name]}
 							onChange={handleChange}
 							onBlur={handleBlur}
+							placeholder={placeholder}
 						/>
 					</Form.Item>
 				);

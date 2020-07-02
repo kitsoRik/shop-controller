@@ -40,10 +40,19 @@ const Drawer = ({ user }: Props) => {
 				style={{ height: "100%" }}
 			>
 				<SubMenu key="sub1" icon={<MailOutlined />} title="Користувачі">
-					<Menu.Item key="create" icon={<PieChartOutlined />}>
+					<Menu.Item
+						key="create"
+						icon={<PieChartOutlined />}
+						onClick={() => history.push("/users/create")}
+					>
 						Створити
 					</Menu.Item>
-					<Menu.Item key="admins">Адміністратори</Menu.Item>
+					<Menu.Item
+						key="admins"
+						onClick={() => history.push("/users/administrators")}
+					>
+						Адміністратори
+					</Menu.Item>
 					<Menu.Item key="sellers">Продавці</Menu.Item>
 					<Menu.Item key="movers">Гружчики</Menu.Item>
 				</SubMenu>

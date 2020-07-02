@@ -26,6 +26,12 @@ const schema = new Schema({
 		type: Boolean,
 		default: false,
 	},
+	role: {
+		type: String,
+		required: true,
+		default: "noone",
+		enum: ["administrator", "seller", "mover", "noone"],
+	},
 });
 
 schema.pre("save", function (next) {
@@ -35,19 +41,49 @@ schema.pre("save", function (next) {
 	next();
 });
 
-const User = model("users", schema);
+const userModel = model("users", schema);
 
-export default {
-	createUser: async (email: string, password: string) =>
-		User.create({ email, password: await hashPassword(password) }),
+const User = {
+	createUser: async (
+		name: string,
+		surname: string,
+		email: string,
+		password: string,
+		role: string
+	) =>
+		userModel.create({
+			name,
+			surname,
+			email,
+			password: await hashPassword(password),
+			role,
+		}),
 
-	getUserById: (id: string) => User.findOne({ id }),
+	changeUser: (
+		id: string,
+		changes: {
+			name?: string;
+			surname?: string;
+			email?: string;
+			role?: string;
+		}
+	) => userModel.findOneAndUpdate({ id }, changes, { new: true }),
 
-	getUserByEmail: (email: string) => User.findOne({ email }),
+	getUserById: (id: string) => userModel.findOne({ id }),
+
+	getUserByEmail: (email: string) => userModel.findOne({ email }),
 
 	getUserByEmailAndPassword: async (email: string, password: string) =>
-		User.findOne({ email, password: await hashPassword(password) }),
+		userModel.findOne({ email, password: await hashPassword(password) }),
+
+	getUsers: async (offset: number, limit: number) =>
+		userModel.find({}).skip(offset).limit(limit),
+
+	getUsersByRole: async (role: string, offset: number, limit: number) =>
+		userModel.find({ role }).skip(offset).limit(limit),
 };
+
+export default User;
 
 const hashPassword = async (password: string) => {
 	return sha256(password);
@@ -56,11 +92,11 @@ const hashPassword = async (password: string) => {
 (async function () {
 	const adminEmail = "admin@admin.com";
 	const adminPassword = "admin";
-	const admin = await User.findOne({ email: adminEmail });
+	const admin = await userModel.findOne({ email: adminEmail });
 
 	if (admin) return;
 
-	await User.create({
+	await userModel.create({
 		name: "Administrator",
 		surname: "Admin",
 		email: adminEmail,

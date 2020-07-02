@@ -1,17 +1,21 @@
 import * as express from "express";
-import bodyParser = require("body-parser");
-import cookieParser = require("cookie-parser");
-import { connect as connectCors } from "./cors";
+import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
+import { connect as connectCors } from "./middlewars/cors";
 import { connect as connectDB } from "./db/db";
 import apiRouter from "./api/api";
+import { connect as connectContext } from "./middlewars/context";
+import { connect as connectStatic } from "./middlewars/static";
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+connectStatic(app);
 
 connectCors(app);
 connectDB();
+connectContext(app);
 
 app.use("/api", apiRouter);
 

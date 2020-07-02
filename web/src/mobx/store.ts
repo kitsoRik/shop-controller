@@ -1,5 +1,5 @@
-import { User } from "./user";
+import { Users } from "./users";
 
 export class Store {
-	user = new User();
+	users = new Users();
 }

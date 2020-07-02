@@ -8,3 +8,11 @@ export const unauthorized = (
 ) => {
 	sendError(response.status(401))(type, body);
 };
+
+export const forbidden = (
+	response: express.Response<any>,
+	type: string,
+	body: object = {}
+) => {
+	sendError(response.status(403))(type, body);
+};
