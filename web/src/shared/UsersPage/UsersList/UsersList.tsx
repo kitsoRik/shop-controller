@@ -1,15 +1,18 @@
 import React from "react";
 
 import classes from "./UsersList.module.scss";
-import { Skeleton, List, Avatar } from "antd";
+import { Skeleton, List, Avatar, Button } from "antd";
 import { IUser } from "../../../models/IUser";
 import { Link } from "react-router-dom";
+import { useLocationQuery } from "react-use-location-query";
 
 interface Props {
 	users: IUser[];
 }
 
 const AdministratorsList = ({ users }: Props) => {
+	const { setQueryField } = useLocationQuery({});
+
 	return (
 		<List
 			className={classes.list}
@@ -19,7 +22,9 @@ const AdministratorsList = ({ users }: Props) => {
 			renderItem={({ id, surname, name, role, imageName }) => (
 				<List.Item
 					actions={[
-						<Link to={`/users/${role}s/${id}/edit`}>edit</Link>,
+						<Button onClick={() => setQueryField("edit", id)}>
+							edit
+						</Button>,
 					]}
 				>
 					<Skeleton avatar title={false} loading={false} active>

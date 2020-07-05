@@ -39,7 +39,6 @@ const LoginForm = ({ user }: Props) => {
 						},
 					},
 				} = await api.auth.loginIn(inputEmail, inputPassword);
-				console.log();
 				user!.setData(name, surname, email, role, !!isAdmin);
 			} catch (e) {
 				if (e.response) {

@@ -10,6 +10,7 @@ import { inject, observer } from "mobx-react";
 import { Store } from "../../../mobx/store";
 import api from "../../../providers/api";
 import { notification } from "antd";
+import { useLocationQuery } from "react-use-location-query";
 
 interface Props {
 	store?: Store;
@@ -18,15 +19,16 @@ interface Props {
 const UsersEdit = ({ store }: Props) => {
 	const { users } = store!;
 
-	const history = useHistory();
-	const { id } = useParams<{ id: string }>();
+	const {
+		fullQuery: { edit },
+		setQueryField,
+	} = useLocationQuery({});
 
-	const user = users.getUserById(id);
-
+	const user = users.getUserById(edit as any);
 	if (!user) return null;
 
 	const handleClose = () => {
-		history.push(`/users/${user.role}s/`);
+		setQueryField("edit", "none");
 	};
 
 	return (

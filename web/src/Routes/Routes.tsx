@@ -8,6 +8,7 @@ import { observer, inject } from "mobx-react";
 import Users from "../pages/Users";
 import Actions from "../pages/Actions";
 import Products from "../pages/Products";
+import Categories from "../pages/Categories";
 
 interface Props {
 	user?: User;
@@ -20,6 +21,7 @@ const Routes = ({ user }: Props) => {
 			{user!.isAdmin && adminsRoutes}
 			<Route path="/actions" render={() => <Actions />} />
 			<Route path="/products" render={() => <Products />} />
+			<Route path="/categories" render={() => <Categories />} />
 		</Switch>
 	);
 };

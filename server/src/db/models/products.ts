@@ -12,6 +12,10 @@ const schema = new Schema({
 		type: Number,
 		default: 0,
 	},
+	category: {
+		type: String, // category id
+		required: true,
+	},
 });
 
 schema.pre("save", function (next) {
@@ -24,9 +28,7 @@ schema.pre("save", function (next) {
 const productModel = model("sessions", schema);
 
 const Product = {
-	createProduct: (name: string) => productModel.create({ userId }),
-	removeSession: (sesid: string) => productModel.findOneAndRemove({ sesid }),
-	getSessionBySesid: (sesid: string) => sessionModel.findOne({ sesid }),
+	createProduct: (name: string) => productModel.create({ name, count: 0 }),
 };
 productModel;
 

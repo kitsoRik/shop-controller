@@ -51,7 +51,9 @@ const CreateProductForm = ({}: Props) => {
 					label="Номер накладної"
 					help={touched.invoiceNumber && errors.invoiceNumber}
 					validateStatus={
-						touched && errors.invoiceNumber ? "error" : "validating"
+						touched.invoiceNumber && errors.invoiceNumber
+							? "error"
+							: "validating"
 					}
 				>
 					<Input

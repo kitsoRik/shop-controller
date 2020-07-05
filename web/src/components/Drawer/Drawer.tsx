@@ -27,15 +27,17 @@ const Drawer = ({ user }: Props) => {
 				inlineCollapsed={collapsed}
 				style={{ height: "100%" }}
 			>
-				{user?.isAdmin && administratorItems(history)}
+				{user?.isAdmin && adminItems(history)}
 				{user?.role === UserRole.MOVER && moverItems(history)}
 				{user?.role === UserRole.MANAGER && managerItems(history)}
+				{user?.role === UserRole.ADMINISTRATOR &&
+					administratorItems(history)}
 			</Menu>
 		</div>
 	);
 };
 
-const administratorItems = (history: any) => [
+const adminItems = (history: any) => [
 	<SubMenu key="users" icon={<MailOutlined />} title="Користувачі">
 		<Menu.Item
 			key="create"
@@ -107,6 +109,25 @@ const managerItems = (history: any) => [
 		onClick={() => history.push("/products/")}
 	>
 		Продукти
+	</Menu.Item>,
+];
+
+const administratorItems = (history: any) => [
+	<Menu.Item
+		key="create-product"
+		icon={<PieChartOutlined />}
+		onClick={() =>
+			history.push(`/actions/${UserRole.ADMINISTRATOR}s/create-category`)
+		}
+	>
+		Створити категорію
+	</Menu.Item>,
+	<Menu.Item
+		key="categories"
+		icon={<PieChartOutlined />}
+		onClick={() => history.push("/categories/")}
+	>
+		Категорії
 	</Menu.Item>,
 ];
 

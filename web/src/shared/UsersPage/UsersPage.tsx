@@ -9,6 +9,7 @@ import { inject, observer } from "mobx-react";
 import { Store } from "../../mobx/store";
 import { UserRole } from "../../models/UserRole";
 import api from "../../providers/api";
+import { useLocationQuery } from "react-use-location-query";
 
 interface Props {
 	role: UserRole;
@@ -29,14 +30,17 @@ const UsersPage = ({ store, role }: Props) => {
 		})();
 	}, [role]);
 
+	const { query, setQueryField } = useLocationQuery({
+		edit: {
+			type: "string",
+			default: "none",
+			hideIfDefault: true,
+		},
+	});
 	return (
 		<Page>
 			<UsersList users={store!.users.getUsersByRole(role)} />
-			<Route
-				path={`/users/${role}s/:id/edit`}
-				exact
-				render={() => <UsersEdit />}
-			/>
+			{query.edit && <UsersEdit />}
 		</Page>
 	);
 };

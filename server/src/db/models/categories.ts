@@ -10,6 +10,10 @@ const schema = new Schema({
 		type: String,
 		required: true,
 	},
+	description: {
+		type: String,
+		required: true,
+	},
 });
 
 schema.pre("save", function (next) {
@@ -22,7 +26,8 @@ schema.pre("save", function (next) {
 const categoryModel = model("categories", schema);
 
 const Category = {
-	createCategory: (name: string) => categoryModel.create({ name }),
+	createCategory: (name: string, description: string) =>
+		categoryModel.create({ name, description }),
 	getCategories: () => categoryModel.find(),
 };
 
