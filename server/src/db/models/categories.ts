@@ -28,7 +28,7 @@ const categoryModel = model("categories", schema);
 const Category = {
 	createCategory: (name: string, description: string) =>
 		categoryModel.create({ name, description }),
-	getCategories: () => categoryModel.find(),
+	getCategories: () => categoryModel.find({}),
 };
 
 export default Category;

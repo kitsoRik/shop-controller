@@ -15,9 +15,12 @@ router.get("/", async (req: IExtendRequest, res) => {
 	}
 
 	const { offset, limit }: any = req.query;
+	console.log(offset, limit);
 
-	const categories = await Category.getCategories().skip(offset).limit(limit);
-	const categoriesNumbers = Category.getCategories().countDocuments();
+	const categories = await Category.getCategories()
+		.skip(parseInt(offset))
+		.limit(parseInt(limit));
+	const categoriesNumbers = await Category.getCategories().countDocuments();
 
 	sendSuccess(res)({
 		categories,
@@ -31,9 +34,12 @@ router.put(`/`, async (req: IExtendRequest, res) => {
 		return forbidden(res, "NO_ACCESS");
 	}
 
-	const { name, description } = req.body;
+	const { name, description } = req.query;
 
-	const users = await Category.createCategory(name, description);
+	const users = await Category.createCategory(
+		name as string,
+		description as string
+	);
 
 	sendSuccess(res)({
 		users,

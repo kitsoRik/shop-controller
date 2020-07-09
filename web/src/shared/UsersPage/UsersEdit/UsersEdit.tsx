@@ -22,13 +22,15 @@ const UsersEdit = ({ store }: Props) => {
 	const {
 		fullQuery: { edit },
 		setQueryField,
-	} = useLocationQuery({});
+	} = useLocationQuery({
+		edit: { type: "string", initial: "", hideIfInitial: true },
+	});
 
 	const user = users.getUserById(edit as any);
 	if (!user) return null;
 
 	const handleClose = () => {
-		setQueryField("edit", "none");
+		setQueryField("edit", "");
 	};
 
 	return (

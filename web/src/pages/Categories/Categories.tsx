@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Page from "../../shared/Page";
 import CategoriesList from "./CategoriesList";
 import { useLocationQuery } from "react-use-location-query";
+import { inject, observer } from "mobx-react";
+import { Store } from "../../mobx/store";
 
-const Categories = () => {
-	const { query } = useLocationQuery({
-		edit: {
-			type: "boolean",
-			default: false,
-			hideIfDefault: true,
+interface Props {
+	store?: Store;
+}
+
+const Categories = ({ store }: Props) => {
+	const {
+		query: { page, limit },
+	} = useLocationQuery({
+		page: {
+			type: "number",
+			initial: 1,
+		},
+		limit: {
+			type: "number",
+			initial: 10,
+			hideIfInitial: true,
 		},
 	});
+	useEffect(() => {
+		store?.categories.loadCategories(page as number, limit as number);
+	}, []);
 
 	return (
 		<Page>
@@ -19,4 +34,4 @@ const Categories = () => {
 	);
 };
 
-export default Categories;
+export default inject("store")(observer(Categories));

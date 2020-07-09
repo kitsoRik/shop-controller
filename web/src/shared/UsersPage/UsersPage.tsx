@@ -33,8 +33,8 @@ const UsersPage = ({ store, role }: Props) => {
 	const { query, setQueryField } = useLocationQuery({
 		edit: {
 			type: "string",
-			default: "none",
-			hideIfDefault: true,
+			initial: "",
+			hideIfInitial: true,
 		},
 	});
 	return (
