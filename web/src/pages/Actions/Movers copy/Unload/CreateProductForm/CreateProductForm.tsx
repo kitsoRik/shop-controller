@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import classes from "./CreateProductForm.module.scss";
-import { Form, Input, Button, Spin } from "antd";
+import { Form, Input, Button, Spin, Select } from "antd";
 import { useFormik } from "formik";
 import api from "../../../../../providers/api";
 
@@ -13,6 +13,8 @@ const CreateProductForm = ({}: Props) => {
 		values,
 		errors,
 		touched,
+		setFieldValue,
+		setFieldTouched,
 		handleChange,
 		handleBlur,
 		handleSubmit,
@@ -20,22 +22,24 @@ const CreateProductForm = ({}: Props) => {
 		isValid,
 	} = useFormik({
 		initialValues: {
-			invoiceNumber: "",
+			category: "",
+			name: "",
 		},
-		validate: ({ invoiceNumber }) => {
+		validate: ({ category }) => {
 			const errors: any = {};
 
-			if (invoiceNumber === "")
-				errors.invoiceNumber = "Номер накладної повинен бути вказаний";
+			if (category === "")
+				errors.category = "Категорія продукту повинена бути вказана";
 
 			return errors;
 		},
-		onSubmit: async ({ invoiceNumber }) => {
+		onSubmit: async ({ category, name }) => {
 			setLoading(true);
 			try {
 				const {
 					data: { result },
-				} = await api.actions.movers.unload(+invoiceNumber);
+				} = await api.products.createProduct(category, name);
+				console.log(result);
 			} catch (e) {
 				console.log(e);
 				JSON.stringify(e);
@@ -48,17 +52,33 @@ const CreateProductForm = ({}: Props) => {
 		<Spin spinning={loading}>
 			<Form className={classes.form}>
 				<Form.Item
-					label="Номер накладної"
-					help={touched.invoiceNumber && errors.invoiceNumber}
+					label="Категорія"
+					help={touched.category && errors.category}
 					validateStatus={
-						touched.invoiceNumber && errors.invoiceNumber
+						touched.category && errors.category
 							? "error"
 							: "validating"
 					}
 				>
+					<Select
+						value={values.category}
+						onChange={(value) => setFieldValue("category", value)}
+						onBlur={() => setFieldTouched("category", true)}
+					>
+						<Select.Option value="1">1</Select.Option>
+						<Select.Option value="2">1</Select.Option>
+					</Select>
+				</Form.Item>
+				<Form.Item
+					label="Назва"
+					help={touched.name && errors.name}
+					validateStatus={
+						touched.name && errors.name ? "error" : "validating"
+					}
+				>
 					<Input
-						name="invoiceNumber"
-						value={values.invoiceNumber}
+						name="name"
+						value={values.name}
 						onChange={handleChange}
 						onBlur={handleBlur}
 					/>
@@ -71,7 +91,7 @@ const CreateProductForm = ({}: Props) => {
 						disabled={!dirty || !isValid}
 						onClick={() => handleSubmit()}
 					>
-						Подати
+						Створити
 					</Button>
 				</Form.Item>
 			</Form>

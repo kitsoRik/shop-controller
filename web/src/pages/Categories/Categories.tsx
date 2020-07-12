@@ -10,23 +10,6 @@ interface Props {
 }
 
 const Categories = ({ store }: Props) => {
-	const {
-		query: { page, limit },
-	} = useLocationQuery({
-		page: {
-			type: "number",
-			initial: 1,
-		},
-		limit: {
-			type: "number",
-			initial: 10,
-			hideIfInitial: true,
-		},
-	});
-	useEffect(() => {
-		store?.categories.loadCategories(page as number, limit as number);
-	}, []);
-
 	return (
 		<Page>
 			<CategoriesList />

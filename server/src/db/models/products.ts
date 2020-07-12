@@ -25,10 +25,12 @@ schema.pre("save", function (next) {
 	next();
 });
 
-const productModel = model("sessions", schema);
+const productModel = model("products", schema);
 
 const Product = {
-	createProduct: (name: string) => productModel.create({ name, count: 0 }),
+	createProduct: (name: string, category: string) =>
+		productModel.create({ name, category, count: 0 }),
+	getProducts: () => productModel.find({}),
 };
 productModel;
 

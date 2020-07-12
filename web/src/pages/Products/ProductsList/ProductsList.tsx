@@ -1,17 +1,16 @@
+import { List, Skeleton } from "antd";
 import React, { useEffect } from "react";
-
-import classes from "./CategoriesList.module.scss";
-import { List, Skeleton, Avatar } from "antd";
-import { inject, observer } from "mobx-react";
-import { Store } from "../../../mobx/store";
 import { Link } from "react-router-dom";
 import { useLocationQuery } from "react-use-location-query";
+import { Store } from "../../../mobx/store";
+
+import classes from "./ProductsList.module.scss";
 
 interface Props {
 	store?: Store;
 }
 
-const CategoriesList = ({ store }: Props) => {
+const ProductsList = ({ store }: Props) => {
 	const {
 		query: { page, limit },
 	} = useLocationQuery({
@@ -53,4 +52,4 @@ const CategoriesList = ({ store }: Props) => {
 	);
 };
 
-export default inject("store")(observer(CategoriesList));
+export default ProductsList;
