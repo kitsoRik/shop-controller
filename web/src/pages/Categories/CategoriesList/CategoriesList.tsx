@@ -5,7 +5,7 @@ import { List, Skeleton, Avatar } from "antd";
 import { inject, observer } from "mobx-react";
 import { Store } from "../../../mobx/store";
 import { Link } from "react-router-dom";
-import { useLocationQuery } from "react-use-location-query";
+import { useLocationQuery } from "react-location-query";
 
 interface Props {
 	store?: Store;

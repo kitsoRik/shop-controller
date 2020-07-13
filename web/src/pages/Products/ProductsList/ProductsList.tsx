@@ -1,22 +1,30 @@
 import { List, Skeleton } from "antd";
+import { inject, observer } from "mobx-react";
 import React, { useEffect } from "react";
+import { useLocationQuery } from "react-location-query";
 import { Link } from "react-router-dom";
-import { useLocationQuery } from "react-use-location-query";
+import { ProductsStore } from "../../../mobx/products-store";
 import { Store } from "../../../mobx/store";
 
 import classes from "./ProductsList.module.scss";
 
 interface Props {
-	store?: Store;
+	productsStore?: ProductsStore;
 }
 
-const ProductsList = ({ store }: Props) => {
+const ProductsList = ({ productsStore }: Props) => {
 	const {
-		query: { page, limit },
+		query: { page },
+		setQueryField,
 	} = useLocationQuery({
 		page: {
 			type: "number",
 			initial: 1,
+		},
+		edit: {
+			type: "string",
+			initial: "",
+			hideIfInitial: true,
 		},
 		limit: {
 			type: "number",
@@ -25,24 +33,35 @@ const ProductsList = ({ store }: Props) => {
 		},
 	});
 	useEffect(() => {
-		store?.categories.loadCategories(page as number, limit as number);
-	}, []);
+		productsStore!.loadProducts(page as number);
+	}, [page]);
+
 	return (
 		<List
 			className={classes.list}
 			loading={false}
 			header={"Категорії"}
 			itemLayout="horizontal"
-			dataSource={store!.categories.categoriesByPage(page as number)}
+			dataSource={productsStore!.products}
 			locale={{ emptyText: "Немає категорій" }}
-			renderItem={({ id, name, description }) => (
+			renderItem={({ id, name, category }) => (
 				<List.Item
-					actions={[<Link to={`/categories/${id}/edit`}>edit</Link>]}
+					actions={[
+						<Link
+							to=""
+							onClick={(e) => {
+								e.preventDefault();
+								setQueryField("edit", id);
+							}}
+						>
+							Редагувати
+						</Link>,
+					]}
 				>
 					<Skeleton avatar title={false} loading={false} active>
 						<List.Item.Meta
 							title={<a href="https://ant.design">{`${name}`}</a>}
-							description={description}
+							description={"123"}
 						/>
 						<div>content</div>
 					</Skeleton>
@@ -52,4 +71,4 @@ const ProductsList = ({ store }: Props) => {
 	);
 };
 
-export default ProductsList;
+export default inject("productsStore")(observer(ProductsList));

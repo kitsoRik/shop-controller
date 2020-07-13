@@ -4,7 +4,7 @@ import classes from "./UsersList.module.scss";
 import { Skeleton, List, Avatar, Button } from "antd";
 import { IUser } from "../../../models/IUser";
 import { Link } from "react-router-dom";
-import { useLocationQuery } from "react-use-location-query";
+import { useLocationQuery } from "react-location-query";
 
 interface Props {
 	users: IUser[];

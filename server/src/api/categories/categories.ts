@@ -10,12 +10,8 @@ const router = express.Router();
 
 router.get("/", async (req: IExtendRequest, res) => {
 	const { user } = req.context!;
-	if (!user!.isAdmin && user!.role !== UserRole.ADMINISTRATOR) {
-		return forbidden(res, "NO_ACCESS");
-	}
 
 	const { offset, limit }: any = req.query;
-	console.log(offset, limit);
 
 	const categories = await Category.getCategories()
 		.skip(parseInt(offset))

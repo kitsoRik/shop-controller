@@ -4,11 +4,16 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "mobx-react";
-import { user, store } from "./mobx/mobx";
+import { user, store, productsStore } from "./mobx/mobx";
+import { setOptions } from "react-location-query";
+
+setOptions({
+	removeUnusedQueryFields: true,
+});
 
 ReactDOM.render(
 	<React.StrictMode>
-		<Provider user={user} store={store}>
+		<Provider user={user} store={store} productsStore={productsStore}>
 			<App />
 		</Provider>
 	</React.StrictMode>,

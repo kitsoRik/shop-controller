@@ -6,7 +6,10 @@ import Product from "../../db/models/products";
 const router = express.Router();
 
 router.get("/", async (req: IExtendRequest, res) => {
-	const products = await Product.getProducts();
+	const { offset, limit } = req.query;
+	const products = await Product.getProducts()
+		.skip(+offset!)
+		.limit(+limit!);
 
 	sendSuccess(res)({
 		products,

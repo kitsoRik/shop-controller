@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Page from "../../shared/Page";
 import CategoriesList from "./CategoriesList";
-import { useLocationQuery } from "react-use-location-query";
 import { inject, observer } from "mobx-react";
 import { Store } from "../../mobx/store";
 

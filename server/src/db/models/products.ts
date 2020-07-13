@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 const schema = new Schema({
 	id: {
 		type: String,
+		required: true,
 	},
 	name: {
 		type: String,
@@ -16,11 +17,19 @@ const schema = new Schema({
 		type: String, // category id
 		required: true,
 	},
+	description: {
+		type: String,
+		default: "",
+	},
+	price: {
+		type: Number,
+		required: true,
+	},
 });
 
 schema.pre("save", function (next) {
 	// @ts-ignore
-	if (!this.sesid) this.sesid = uuidv4();
+	if (!this.id) this.id = uuidv4();
 
 	next();
 });

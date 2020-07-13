@@ -5,7 +5,6 @@ import { IUser } from "../../../models/IUser";
 import { Users } from "../../../mobx/users";
 import { useFormik } from "formik";
 import { userValidator } from "../../../providers/validator/user-validator";
-import UsersEditForm from "./UsersEditForm";
 import { inject, observer } from "mobx-react";
 import { Store } from "../../../mobx/store";
 import api from "../../../providers/api";
@@ -112,8 +111,11 @@ const UsersEditHelper = ({ users, user, handleClose }: HelperProps) => {
 			keyboard={false}
 			closable={false}
 			maskClosable={false}
-		>
-			<UsersEditForm
+		></Modal>
+	);
+};
+
+/**<UsersEditForm
 				values={values}
 				errors={errors as any}
 				touched={touched as any}
@@ -121,9 +123,6 @@ const UsersEditHelper = ({ users, user, handleClose }: HelperProps) => {
 				setFieldTouched={setFieldTouched}
 				handleChange={handleChange}
 				handleBlur={handleBlur}
-			/>
-		</Modal>
-	);
-};
+			/> */
 
 export default inject("store")(observer(UsersEdit));

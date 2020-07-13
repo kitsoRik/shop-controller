@@ -9,7 +9,7 @@ import { inject, observer } from "mobx-react";
 import { Store } from "../../mobx/store";
 import { UserRole } from "../../models/UserRole";
 import api from "../../providers/api";
-import { useLocationQuery } from "react-use-location-query";
+import { useLocationQuery } from "react-location-query";
 
 interface Props {
 	role: UserRole;

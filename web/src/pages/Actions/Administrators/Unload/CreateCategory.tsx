@@ -11,7 +11,7 @@ const CreateCategory = () => {
 		<Page className={classes.page}>
 			<CategoryForm
 				initialValues={{ name: "", description: "" }}
-				apiMethod={api.actions.administrators.createCategory}
+				apiMethod={api.categories.createCategory}
 			/>
 		</Page>
 	);
