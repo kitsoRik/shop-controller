@@ -8,4 +8,6 @@ export interface FormItemPropsBase {
 	initialValue?: string;
 	handleChange?: (e: any) => any;
 	handleBlur?: (e: any) => any;
+	setFieldValue?: (name: string, value: any) => any;
+	setFieldTouched?: (name: string, value: boolean) => any;
 }

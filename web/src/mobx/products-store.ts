@@ -7,6 +7,7 @@ export interface IProduct {
 	id: string;
 	name: string;
 	category: string; //id
+	price: number;
 }
 
 export class ProductsStore {
@@ -17,6 +18,10 @@ export class ProductsStore {
 		this.loadCategories();
 	}
 
+	@action getProductById = (id: string) => {
+		return this.products.find((p) => p.id === id);
+	};
+
 	@action loadCategories = async () => {
 		const {
 			data: { result },
@@ -26,10 +31,14 @@ export class ProductsStore {
 		this.categories = categories;
 	};
 
-	@action createProduct = async (name: string, category: string) => {
+	@action createProduct = async (
+		name: string,
+		category: string,
+		price: string
+	) => {
 		const {
 			data: { result },
-		} = await api.products.createProduct(name, category);
+		} = await api.products.createProduct(name, category, +price);
 
 		const product: IProduct = result.product;
 
@@ -44,5 +53,24 @@ export class ProductsStore {
 		const products: IProduct[] = result.products;
 
 		this.products = products;
+	};
+
+	@action changeProduct = async (
+		id: string,
+		name: string,
+		category: string,
+		price: number
+	) => {
+		const {
+			data: { result },
+		} = await api.products.changeProduct(id, name, category, price);
+
+		const newProduct: IProduct = result.product;
+
+		const productIndex = this.products.findIndex((p) => p.id === id);
+		if (productIndex !== -1) {
+			this.products[productIndex] = newProduct;
+			console.log(this.products[productIndex].name);
+		}
 	};
 }

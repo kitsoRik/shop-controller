@@ -4,7 +4,6 @@ import Movers from "./Movers";
 import { User } from "../../mobx/user";
 import { inject, observer } from "mobx-react";
 import { UserRole } from "../../models/UserRole";
-import Managers from "./Movers copy";
 import Administrators from "./Administrators";
 
 interface Props {
@@ -18,12 +17,6 @@ const Actions = ({ user }: Props) => {
 				<Route
 					path={`/actions/${UserRole.MOVER}s`}
 					component={Movers}
-				/>
-			)}
-			{user?.role === UserRole.MANAGER && (
-				<Route
-					path={`/actions/${UserRole.MANAGER}s`}
-					component={Managers}
 				/>
 			)}
 			{user?.role === UserRole.ADMINISTRATOR && (

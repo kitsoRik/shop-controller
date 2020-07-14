@@ -9,6 +9,7 @@ import Users from "../pages/Users";
 import Actions from "../pages/Actions";
 import Products from "../pages/Products";
 import Categories from "../pages/Categories";
+import CreateProduct from "../pages/Products/CreateProduct/CreateProduct";
 
 interface Props {
 	user?: User;
@@ -20,7 +21,12 @@ const Routes = ({ user }: Props) => {
 			<Route path="/" exact render={() => <Home />} />
 			{user!.isAdmin && adminsRoutes}
 			<Route path="/actions" render={() => <Actions />} />
-			<Route path="/products" render={() => <Products />} />
+			<Route
+				path="/products/create"
+				exact
+				render={() => <CreateProduct />}
+			/>
+			<Route path="/products" exact render={() => <Products />} />
 			<Route path="/categories" render={() => <Categories />} />
 		</Switch>
 	);

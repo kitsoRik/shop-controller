@@ -1,7 +1,7 @@
 import { List, Skeleton } from "antd";
 import { inject, observer } from "mobx-react";
-import React, { useEffect } from "react";
-import { useLocationQuery } from "react-location-query";
+import React, { useEffect, useState } from "react";
+import { useLocationQuery, useLocationQueryExtend } from "react-location-query";
 import { Link } from "react-router-dom";
 import { ProductsStore } from "../../../mobx/products-store";
 import { Store } from "../../../mobx/store";
@@ -13,25 +13,31 @@ interface Props {
 }
 
 const ProductsList = ({ productsStore }: Props) => {
+	const [_s] = useState(Math.random());
 	const {
 		query: { page },
 		setQueryField,
-	} = useLocationQuery({
-		page: {
-			type: "number",
-			initial: 1,
+	} = useLocationQueryExtend(
+		{
+			page: {
+				type: "number",
+				initial: 1,
+			},
+			edit: {
+				type: "string",
+				initial: "",
+				hideIfInitial: true,
+			},
+			limit: {
+				type: "number",
+				initial: 10,
+				hideIfInitial: true,
+			},
 		},
-		edit: {
-			type: "string",
-			initial: "",
-			hideIfInitial: true,
-		},
-		limit: {
-			type: "number",
-			initial: 10,
-			hideIfInitial: true,
-		},
-	});
+		// @ts-ignore
+		`ProdList ${_s}`
+	);
+	console.log(page);
 	useEffect(() => {
 		productsStore!.loadProducts(page as number);
 	}, [page]);
@@ -42,7 +48,7 @@ const ProductsList = ({ productsStore }: Props) => {
 			loading={false}
 			header={"Категорії"}
 			itemLayout="horizontal"
-			dataSource={productsStore!.products}
+			dataSource={productsStore?.products}
 			locale={{ emptyText: "Немає категорій" }}
 			renderItem={({ id, name, category }) => (
 				<List.Item

@@ -1,72 +1,66 @@
 import React, { useState } from "react";
 
-import classes from "./CreateProductForm.module.scss";
+import classes from "./ProductForm.module.scss";
 import { Input, Button, Spin, Select } from "antd";
 import { useFormik } from "formik";
-import api from "../../../../../providers/api";
 import { inject, observer } from "mobx-react";
-import { ProductsStore } from "../../../../../mobx/products-store";
-import Form from "../../../../../shared/Form";
-import FormItem from "../../../../../shared/Form/FormItem";
+import { ProductsStore } from "../../../mobx/products-store";
+import Form from "../../../shared/Form";
+import FormItem from "../../../shared/Form/FormItem";
 
 interface Props {
+	onSubmit: (values: any) => void;
+	loading: boolean;
 	productsStore?: ProductsStore;
+	withSubmitButton?: boolean;
+
+	onValuesChange?: (values: { [x: number]: any }) => void;
+	onValidChange?: (valid: boolean, values: { [x: number]: any }) => void;
+
+	initialCategory?: string;
+	initialName?: string;
+	initialPrice?: string;
 }
 
-const CreateProductForm = ({ productsStore }: Props) => {
-	const [loading, setLoading] = useState(false);
-	const {
-		values,
-		errors,
-		touched,
-		setFieldValue,
-		setFieldTouched,
-		handleChange,
-		handleBlur,
-		handleSubmit,
-		dirty,
-		isValid,
-	} = useFormik({
-		initialValues: {
-			category: "",
-			name: "",
-			description: "",
-			price: "",
-		},
-		validate: ({ category, name, price }) => {
-			const errors: any = {};
-
-			if (category === "")
-				errors.category = "Категорія продукту повинена бути вказана";
-
-			return errors;
-		},
-		onSubmit: async ({ category, name }) => {
-			setLoading(true);
-			try {
-				await productsStore!.createProduct(name, category);
-			} catch (e) {
-				console.log(e);
-				JSON.stringify(e);
-			}
-			setLoading(false);
-		},
-	});
-
+const ProductForm = ({
+	productsStore,
+	loading,
+	onSubmit,
+	onValuesChange,
+	onValidChange,
+	withSubmitButton = true,
+	initialCategory,
+	initialName,
+	initialPrice,
+}: Props) => {
 	return (
 		<Spin spinning={loading}>
 			<Form
 				className={classes.form}
-				obSubmit={(a) => {
-					console.log(a);
-				}}
+				onSubmit={onSubmit}
+				onValuesChange={onValuesChange}
+				onValidChange={onValidChange}
 			>
+				<FormItem
+					name="category"
+					label="Категорія"
+					initialValue={initialCategory}
+					type="select"
+					options={productsStore!.categories.map((c) => ({
+						text: c.name,
+						value: c.id,
+					}))}
+					validate={(name: string) => {
+						if (name === "")
+							return "Назва продукту повинена бути вказана";
+					}}
+				/>
 				<FormItem
 					name="name"
 					label="Ім'я"
-					initialValue=""
+					initialValue={initialName}
 					type="input"
-					validate={(name) => {
+					validate={(name: string) => {
 						if (name === "")
 							return "Назва продукту повинена бути вказана";
 					}}
@@ -74,9 +68,9 @@ const CreateProductForm = ({ productsStore }: Props) => {
 				<FormItem
 					name="price"
 					label="Ціна"
-					initialValue=""
+					initialValue={initialPrice}
 					type="input"
-					validate={(price) => {
+					validate={(price: string) => {
 						if (price === "")
 							return "Ціна продукту повинена бути вказана";
 						else if (price[0] === "-")
@@ -87,7 +81,7 @@ const CreateProductForm = ({ productsStore }: Props) => {
 							return "Після крапки може бути тільки дві цифри";
 					}}
 				/>
-				<FormItem type="button" isSubmit={true} />
+				{withSubmitButton && <FormItem type="button" isSubmit={true} />}
 			</Form>
 		</Spin>
 	);
@@ -172,4 +166,4 @@ const CreateProductForm = ({ productsStore }: Props) => {
 					</Button>
 				</Form.Item> */
 
-export default inject("productsStore")(observer(CreateProductForm));
+export default inject("productsStore")(observer(ProductForm));

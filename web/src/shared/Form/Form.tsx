@@ -1,27 +1,41 @@
-import React, { ReactChildren, ReactNode } from "react";
+import React, { ReactChildren, ReactNode, useEffect } from "react";
 import { Form } from "antd";
 import FormItem from "./FormItem";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 
 interface Props {
 	className?: string;
 
-	children: JSX.Element[] | JSX.Element;
+	children: (JSX.Element | boolean)[] | JSX.Element | boolean;
 
-	obSubmit?: (values: any) => void;
+	onSubmit: (values: { [x: number]: any }) => void;
+	onValuesChange?: (values: { [x: number]: any }) => void;
+	onValidChange?: (valid: boolean, values: { [x: number]: any }) => void;
 }
 
-const _Form = ({ children, className }: Props) => {
-	const formItems = (Array.isArray(children) ? children : [children]).filter(
-		(c) => c.type === FormItem
-	);
+const _Form = ({
+	children,
+	className,
+	onSubmit,
+	onValuesChange,
+	onValidChange,
+}: Props) => {
+	const formItems: JSX.Element[] = (Array.isArray(children)
+		? children
+		: [children]
+	).filter(
+		(c) => typeof c === "object" && c.type === FormItem
+	) as JSX.Element[];
 	const {
+		isValid,
 		values,
 		errors,
 		touched,
 		handleChange,
 		handleBlur,
 		handleSubmit,
+		setFieldValue,
+		setFieldTouched,
 	} = useFormik({
 		initialValues: {
 			...formItems
@@ -34,6 +48,8 @@ const _Form = ({ children, className }: Props) => {
 				.reduce((p, c) => ({ ...p, ...c }), {}),
 		},
 		validate: (values) => {
+			if (onValuesChange) onValuesChange(values);
+
 			const errors: any = {};
 
 			formItems.forEach(({ props: { name, validate } }: any) => {
@@ -42,13 +58,14 @@ const _Form = ({ children, className }: Props) => {
 
 				if (result) errors[name] = result;
 			});
-
 			return errors;
 		},
-		onSubmit: () => {
-			console.log("submit");
-		},
+		onSubmit,
 	});
+
+	useEffect(() => {
+		if (onValidChange) onValidChange(isValid, values);
+	}, [isValid, values, onValidChange]);
 
 	let items: ReactNode[] = formItems.map((c) => {
 		const { props } = c;
@@ -66,6 +83,8 @@ const _Form = ({ children, className }: Props) => {
 			value: values[name],
 			handleChange,
 			handleBlur,
+			setFieldValue,
+			setFieldTouched,
 			...newProps,
 		});
 	});

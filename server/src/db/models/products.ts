@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 const schema = new Schema({
 	id: {
 		type: String,
-		required: true,
 	},
 	name: {
 		type: String,
@@ -24,6 +23,7 @@ const schema = new Schema({
 	price: {
 		type: Number,
 		required: true,
+		default: 0,
 	},
 });
 
@@ -37,9 +37,20 @@ schema.pre("save", function (next) {
 const productModel = model("products", schema);
 
 const Product = {
-	createProduct: (name: string, category: string) =>
-		productModel.create({ name, category, count: 0 }),
+	createProduct: (name: string, category: string, price: number) =>
+		productModel.create({ name, category, price, count: 0 }),
 	getProducts: () => productModel.find({}),
+	changeProduct: (
+		id: string,
+		name: string,
+		category: string,
+		price: number
+	) =>
+		productModel.findOneAndUpdate(
+			{ id },
+			{ name, category, price },
+			{ new: true }
+		),
 };
 productModel;
 

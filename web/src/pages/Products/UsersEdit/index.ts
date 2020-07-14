@@ -1,3 +1,3 @@
-import UsersEdit from "./UsersEdit";
+import ProductsEdit from "./ProductsEdit";
 
-export default UsersEdit;
+export default ProductsEdit;
