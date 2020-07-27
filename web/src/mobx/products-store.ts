@@ -18,8 +18,15 @@ export class ProductsStore {
 		this.loadCategories();
 	}
 
-	@action getProductById = (id: string) => {
-		return this.products.find((p) => p.id === id);
+	getProductById = (id: string) => {
+		const product = this.products.find((p) => p.id === id);
+
+		if (!product) {
+			this.loadProduct(id);
+			return null;
+		}
+
+		return product;
 	};
 
 	@action loadCategories = async () => {
@@ -53,6 +60,16 @@ export class ProductsStore {
 		const products: IProduct[] = result.products;
 
 		this.products = products;
+	};
+
+	@action loadProduct = async (id: string) => {
+		const {
+			data: { result },
+		} = await api.products.getProduct(id);
+
+		const product: IProduct = result.product;
+
+		this.products = [...this.products.filter((p) => p.id !== id), product];
 	};
 
 	@action changeProduct = async (

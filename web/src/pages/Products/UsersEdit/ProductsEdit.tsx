@@ -44,6 +44,7 @@ const ProductsEdit = ({ productsStore }: Props) => {
 	if (edit === "") return null;
 
 	const product = productsStore!.getProductById(edit as string);
+	if (!product) return null;
 
 	return (
 		<Modal

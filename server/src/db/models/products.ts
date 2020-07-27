@@ -40,6 +40,7 @@ const Product = {
 	createProduct: (name: string, category: string, price: number) =>
 		productModel.create({ name, category, price, count: 0 }),
 	getProducts: () => productModel.find({}),
+	getProductById: (id: string) => productModel.findOne({ id }),
 	changeProduct: (
 		id: string,
 		name: string,

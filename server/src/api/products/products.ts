@@ -26,6 +26,16 @@ router.post("/", async (req: IExtendRequest, res) => {
 	});
 });
 
+router.get("/:id", async (req: IExtendRequest, res) => {
+	const { id } = req.params;
+
+	const product = await Product.getProductById(id);
+
+	sendSuccess(res)({
+		product,
+	});
+});
+
 router.put("/:id", async (req: IExtendRequest, res) => {
 	const { id } = req.params;
 	const { name, category, price }: any = req.query;

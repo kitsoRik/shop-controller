@@ -1,7 +1,9 @@
 import api from ".";
 
 export const getProducts = (offset: number, limit: number) =>
-	api.api.get("products", { offset, limit });
+	api.api.get("/products", { offset, limit });
+
+export const getProduct = (id: string) => api.api.get(`/products/${id}`);
 
 export const createProduct = (name: string, category: string, price: number) =>
 	api.api.post("/products/", { category, name, price });
